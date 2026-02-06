@@ -1,10 +1,11 @@
+import random
+from decimal import Decimal
 class Human:
     """Base class for characters"""
-    def __init__(self, name, hp, damage, enemy):
+    def __init__(self, name, hp, damage,):
         self.name = name
         self.hp = hp
         self.damage = damage
-        self.enemy = enemy
 
     def __str__(self):
         return f"Name - {self.name}\nHP - {self.hp}\nPower - {self.damage}"
@@ -47,20 +48,21 @@ class Dragon(Human):
 
     def attack(self, enemy):
         enemy.take_damage(self.damage)
-        print(f"{self.name} GHAAAA🐲")
+        print(f"Dragon atack to {enemy.name}! GHAAAA🐲")
 
     def take_damage(self, value):
         super().take_damage(value)
         print(f"{self.name} defends! HP = {self.hp}")
 
-def main():
+def main() -> None:
     """Main game loop"""
-    dragon = Dragon(name="Dragon", hp=500, damage=50, enemy=None)
-    thief = Thief(name="Горчун", hp=100, damage=10, enemy=None)
+    dragon_damage = Decimal(str(random.uniform(5, 10)))
+    dragon = Dragon(name="Dragon", hp=500, damage=dragon_damage)
+    thief = Thief(name="Горчун", hp=100, damage=10)
     print(thief)
     print()
 
-    hero = Hero(uniq="Благословление(+5)", name="Валера", hp=105, damage=15, enemy=None)
+    hero = Hero(uniq="Благословление(+5)", name="Валера", hp=105, damage=15)
     print(hero)
     print(f"Unique ability - {hero.uniq}")
     print()
@@ -75,6 +77,8 @@ def main():
     dragon.attack(thief)
 
     while True:
+        target = random.choice([thief, hero])
+        dragon.attack(target)
         thief.attack(dragon)
         print()
         hero.attack(dragon)
@@ -82,5 +86,11 @@ def main():
         if dragon.hp < 0:
             print("YOU WIN!🏆")
             break
+        elif hero.hp < 0:
+            print(f"Дракон убил {hero.name}")
+            continue
+        elif thief.hp < 0: 
+            print(f"Дракон убил {thief.name}")
+            continue
 if __name__ == "__main__":
     main()
