@@ -1,11 +1,11 @@
 import random
 class Item():
-    def __init__(self, name: str, item: str, value: int):
+    def __init__(self, name: str, kind: str, value: int):
         self.name = name
-        self.item = item
+        self.kind = kind
         self.value = value
     def __str__(self) -> str:
-        return f"🧪{self.name} {self.item}, baff: {self.value}"
+        return f"🧪{self.name} {self.kind}, baff: {self.value}"
 
 class Human():
     """Базовый класс для всех персонажей"""
@@ -27,7 +27,22 @@ class Human():
     
     def add_item(self, item):
         self.inventory.append(item)
-        return f"{self.name} find {item.name}"
+        print(f"{self.name} find {item.name}")
+    def use_item(self):
+        if not self.inventory:
+            print("Backpack empty")
+            return
+    
+        item = self.inventory.pop(0)
+    
+        if item.kind == "weapon":
+            self.damage += item.value
+            print(f"{self.name} equipped {item.name}. DMG + by {item.value}. Current DMG: {self.damage}")   
+
+        if item.kind == "potion":
+            self.hp += item.value
+            print(f"{self.name} use {item.name}. HP + {item.value}. Current HP {self.hp}")
+
 
 class Thief(Human):
     """Класс Вора (быстрый удар)"""
@@ -48,66 +63,23 @@ class Hero(Human):
 class Dragon(Human):
     """Босс вертолет"""
     def attack(self, enemy):
-        print(f"🔥🔥🔥 {self.name} сжигает {enemy.name}!")
+        print(f"🔥🔥🔥 {self.name} fire {enemy.name}!")
         enemy.take_damage(self.damage)
 
 def main():
-    hero = Hero(uniq_ability="Удар Света", name="Валера", hp=120, damage=25)
-    print(hero)
-    print()
-    item = Item(name="Sword", item="Hero_sword", value=10)
-    print(item)
-    print()
-    hero.add_item(item)
-    print(hero.inventory)
-    
+    hero = Hero(uniq_ability="Light punch", name="Valera", hp=120, damage=25)
+    potion = Item(name="Health Potion", kind="potion", value=50)
+    sword = Item(name="Steel Sword", kind="weapon", value=10)
 
+    hero.add_item(sword)
+    hero.add_item(potion)
+    for i in hero.inventory:
+        print(f"Inventory:{i}")
+    print()
+    hero.use_item()
+    hero.use_item()
+    print()
+    print(hero)
+    
 if __name__ == "__main__":
     main()
-
-    # dragon = Dragon(name="Smaug", hp=300, damage=25)
-    # thief = Thief(name="Горчун", hp=100, damage=15)
-    # hero = Hero(uniq_ability="Удар Света", name="Валера", hp=120, damage=25)
-
-    # print("--- НАЧАЛО БИТВЫ ---")
-    # print(dragon)
-    # print(thief)
-    # print(hero)
-    # print("-" * 30)
-
-    # round_number = 1
-    # while True:
-    #     print(f"\n--- Раунд {round_number} ---")
-        
-    #     alive_heroes = []
-    #     if thief.hp > 0:
-    #         alive_heroes.append(thief)
-    #     if hero.hp > 0:
-    #         alive_heroes.append(hero)
-
-    #     if not alive_heroes:
-    #         print(f"\n☠️ Все герои пали. {dragon.name} победил!")
-    #         break
-
-    #     target = random.choice(alive_heroes)
-    #     dragon.attack(target)
-
-    #     if thief.hp > 0:
-    #         thief.attack(dragon)
-    #     else:
-    #         print(f"💀 {thief.name} лежит без сознания...")
-
-    #     if hero.hp > 0:
-    #         hero.attack(dragon)
-    #     else:
-    #         print(f"💀 {hero.name} лежит без сознания...")
-
-    #     print(f"HP Дракона: {dragon.hp}")
-    #     print(f"HP Hero: {hero.hp}")
-    #     print(f"HP Thief: {thief.hp}")
-
-    #     if dragon.hp <= 0:
-    #         print(f"\n🏆 УРА! {dragon.name} повержен! Победа!")
-    #         break
-            
-    #     round_number += 1
