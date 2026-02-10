@@ -3,7 +3,7 @@ from models import *
 
 def main():
     """Main Game Loop"""
-    dragon=Dragon(name="Gorinich", hp=500, damage=25)
+    dragon=Dragon(name="Gorinich", hp=500, damage=10)
     hero=Hero(uniq_ability="Light punch", name="Valera", hp=120, damage=50)
     thief=Thief(name="Ezio", hp=40, damage=50)
     
@@ -25,7 +25,15 @@ def main():
             break
         if dragon.hp <= 0:
             print(f"\n🏆 {dragon.name} killed!!!\n{hero.name} CHAMPION! 🏆")
-            break
+            hero.lvl_up(150)
+            play = input(f"Play? (Y or N): ")
+            if play == "y":
+                dragon=Dragon(name="Serpent", hp=550, damage=15) 
+                continue
+            elif play == "n":
+                break  
+            else:
+                print("Only Y or N")          
         
         print("---Menu game---")
         print(f"1.Attack {dragon.name}")
